@@ -78,8 +78,11 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 # Copy startup script
-COPY start.sh health-check.js ./
-RUN chmod +x start.sh && ls -la start.sh
+COPY start.sh start-simple.sh health-check.js ./
+RUN chmod +x start.sh start-simple.sh && \
+    sed -i 's/\r$//' start.sh start-simple.sh && \
+    ls -la start.sh start-simple.sh && \
+    file start.sh start-simple.sh
 
 USER nextjs
 
@@ -90,4 +93,4 @@ ENV HOSTNAME="0.0.0.0"
 
 # Start the application with debugging
 # Force rebuild: $(date)
-CMD ["sh", "-c", "ls -la && pwd && ./start.sh"]
+CMD ["sh", "-c", "ls -la && pwd && which sh && sh start-simple.sh"]
