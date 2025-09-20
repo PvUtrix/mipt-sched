@@ -7,8 +7,15 @@ if [ ! -f "server.js" ]; then
     echo "ERROR: server.js not found!"
     echo "Current directory contents:"
     ls -la
-    echo "Checking .next directory:"
-    ls -la .next/
+echo "Checking .next directory:"
+ls -la .next/
+echo "Checking if standalone directory exists:"
+if [ -d ".next/standalone" ]; then
+    echo "Found .next/standalone directory:"
+    ls -la .next/standalone/
+else
+    echo "No .next/standalone directory found"
+fi
     echo "Looking for server files:"
     find . -name "*server*" -type f
     echo "Checking if we need to run from .next/standalone:"
@@ -54,30 +61,11 @@ echo "Current directory contents:"
 ls -la
 
 echo "Starting server..."
-# Try different ways to start the server
-if [ -f "server.js" ]; then
-    echo "Starting with server.js..."
-    if ! node server.js; then
-        echo "ERROR: Server failed to start with server.js!"
-        echo "Waiting 60 seconds before exit..."
-        sleep 60
-        exit 1
-    fi
-elif [ -f ".next/standalone/server.js" ]; then
-    echo "Starting with .next/standalone/server.js..."
-    if ! node .next/standalone/server.js; then
-        echo "ERROR: Server failed to start with .next/standalone/server.js!"
-        echo "Waiting 60 seconds before exit..."
-        sleep 60
-        exit 1
-    fi
-else
-    echo "ERROR: No server.js found anywhere!"
-    echo "Trying to run Next.js directly..."
-    if ! npx next start; then
-        echo "ERROR: Next.js start failed!"
-        echo "Waiting 60 seconds before exit..."
-        sleep 60
-        exit 1
-    fi
+# Since we don't have standalone server.js, use Next.js directly
+echo "Using npx next start (no standalone server.js found)..."
+if ! npx next start; then
+    echo "ERROR: Next.js start failed!"
+    echo "Waiting 60 seconds before exit..."
+    sleep 60
+    exit 1
 fi
