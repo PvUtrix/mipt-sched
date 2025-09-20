@@ -33,6 +33,9 @@ RUN npx prisma generate
 # Build the application
 RUN npm run build
 
+# Generate Prisma client again after build to ensure it's available
+RUN npx prisma generate
+
 # Production dependencies
 FROM base AS prod-deps
 WORKDIR /app
@@ -73,6 +76,9 @@ COPY --from=prod-deps /app/node_modules ./node_modules
 # Copy Prisma files for database operations
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+
+# Generate Prisma client for runtime
+RUN npx prisma generate
 
 USER nextjs
 
