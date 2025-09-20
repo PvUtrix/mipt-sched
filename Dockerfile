@@ -10,10 +10,10 @@ WORKDIR /app
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json* yarn.lock* pnpm-lock.yaml* ./
 RUN \
-  if [ -f package-lock.json ]; then npm ci; \
+  if [ -f package-lock.json ]; then npm ci --legacy-peer-deps; \
   elif [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm install --frozen-lockfile; \
-  else npm install; \
+  else npm install --legacy-peer-deps; \
   fi
 
 # Rebuild the source code only when needed
@@ -38,10 +38,10 @@ FROM base AS prod-deps
 WORKDIR /app
 COPY package.json package-lock.json* yarn.lock* pnpm-lock.yaml* ./
 RUN \
-  if [ -f package-lock.json ]; then npm ci --only=production; \
+  if [ -f package-lock.json ]; then npm ci --only=production --legacy-peer-deps; \
   elif [ -f yarn.lock ]; then yarn install --production --frozen-lockfile; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm install --prod --frozen-lockfile; \
-  else npm install --production; \
+  else npm install --production --legacy-peer-deps; \
   fi
 
 # Production image, copy all the files and run next
