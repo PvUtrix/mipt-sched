@@ -81,8 +81,7 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY start.sh start-simple.sh health-check.js ./
 RUN chmod +x start.sh start-simple.sh && \
     sed -i 's/\r$//' start.sh start-simple.sh && \
-    ls -la start.sh start-simple.sh && \
-    file start.sh start-simple.sh
+    ls -la start.sh start-simple.sh
 
 USER nextjs
 
