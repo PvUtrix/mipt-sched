@@ -77,6 +77,10 @@ COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
+# Copy startup script
+COPY start.sh health-check.js ./
+RUN chmod +x start.sh
+
 USER nextjs
 
 EXPOSE 3000
@@ -84,5 +88,5 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Start the application
-CMD ["node", "server.js"]
+# Start the application with debugging
+CMD ["./start.sh"]
