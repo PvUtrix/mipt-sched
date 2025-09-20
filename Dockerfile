@@ -77,9 +77,6 @@ COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
-# Generate Prisma client for runtime
-RUN npx prisma generate
-
 USER nextjs
 
 EXPOSE 3000
