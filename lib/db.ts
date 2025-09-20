@@ -4,6 +4,18 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient()
+// Create a function to safely initialize Prisma client
+function createPrismaClient(): PrismaClient | null {
+  try {
+    return new PrismaClient()
+  } catch (error) {
+    console.warn('Failed to initialize Prisma client:', error)
+    return null
+  }
+}
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+export const prisma = globalForPrisma.prisma ?? createPrismaClient()
+
+if (process.env.NODE_ENV !== 'production' && prisma) {
+  globalForPrisma.prisma = prisma
+}

@@ -5,8 +5,13 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from './db'
 import bcryptjs from 'bcryptjs'
 
+// Only use Prisma adapter if prisma is available and properly initialized
+const adapter = prisma && typeof prisma === 'object' && 'user' in prisma 
+  ? PrismaAdapter(prisma) 
+  : undefined
+
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  ...(adapter && { adapter }),
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -19,32 +24,43 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-          include: { group: true }
-        })
-
-        if (!user) {
+        // Skip database operations if prisma is not available
+        if (!prisma) {
+          console.warn('Prisma client not available, skipping authentication')
           return null
         }
 
-        const isPasswordValid = await bcryptjs.compare(
-          credentials.password,
-          user.password
-        )
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email },
+            include: { group: true }
+          })
 
-        if (!isPasswordValid) {
+          if (!user) {
+            return null
+          }
+
+          const isPasswordValid = await bcryptjs.compare(
+            credentials.password,
+            user.password
+          )
+
+          if (!isPasswordValid) {
+            return null
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name || undefined,
+            firstName: user.firstName || undefined,
+            lastName: user.lastName || undefined,
+            role: user.role,
+            groupId: user.groupId || undefined
+          }
+        } catch (error) {
+          console.warn('Database error during authentication:', error)
           return null
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name || undefined,
-          firstName: user.firstName || undefined,
-          lastName: user.lastName || undefined,
-          role: user.role,
-          groupId: user.groupId || undefined
         }
       }
     })

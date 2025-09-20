@@ -30,11 +30,11 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Generate Prisma client
 RUN npx prisma generate
 
+# Ensure Prisma client is available in the correct location
+RUN cp -r node_modules/.prisma ./prisma-client
+
 # Build the application
 RUN npm run build
-
-# Generate Prisma client again after build to ensure it's available
-RUN npx prisma generate
 
 # Production dependencies
 FROM base AS prod-deps
