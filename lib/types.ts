@@ -26,3 +26,27 @@ export type DateRange = {
   from: Date | undefined
   to: Date | undefined
 }
+
+export type Schedule = {
+  id: string
+  subjectId: string
+  groupId?: string | null
+  subgroupId?: string | null
+  date: Date
+  dayOfWeek: number
+  startTime: string
+  endTime: string
+  location?: string | null
+  eventType?: string | null
+  description?: string | null
+  createdAt: Date
+  updatedAt: Date
+  subject?: {
+    id: string
+    name: string
+  }
+  group?: {
+    id: string
+    name: string
+  }
+}

@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calendar, Users, BookOpen, Clock } from 'lucide-react'
+import { Schedule } from '@/lib/types'
 
 export const dynamic = "force-dynamic"
 
@@ -156,7 +157,7 @@ export default async function AdminDashboard() {
             </p>
           ) : (
             <div className="space-y-4">
-              {recentSchedules?.map((schedule, index) => (
+              {recentSchedules?.map((schedule: Schedule, index: number) => (
                 <div
                   key={schedule?.id || index}
                   className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
