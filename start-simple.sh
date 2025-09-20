@@ -2,11 +2,29 @@
 
 echo "Starting SmartSchedule application..."
 
-# Check if server.js exists
+# Check if server.js exists (standalone mode creates it in the root)
 if [ ! -f "server.js" ]; then
     echo "ERROR: server.js not found!"
     echo "Current directory contents:"
     ls -la
+    echo "Checking .next directory:"
+    ls -la .next/
+    echo "Looking for server files:"
+    find . -name "*server*" -type f
+    echo "Checking if we need to run from .next/standalone:"
+    if [ -d ".next/standalone" ]; then
+        echo "Found .next/standalone directory:"
+        ls -la .next/standalone/
+        echo "Trying to run from .next/standalone..."
+        cd .next/standalone
+        if [ -f "server.js" ]; then
+            echo "Found server.js in .next/standalone, continuing..."
+        else
+            echo "Still no server.js found in .next/standalone"
+            echo "Contents of .next/standalone:"
+            ls -la
+        fi
+    fi
     echo "Waiting 30 seconds before exit..."
     sleep 30
     exit 1
@@ -36,10 +54,30 @@ echo "Current directory contents:"
 ls -la
 
 echo "Starting server..."
-# Add error handling to keep container running
-if ! node server.js; then
-    echo "ERROR: Server failed to start!"
-    echo "Waiting 60 seconds before exit..."
-    sleep 60
-    exit 1
+# Try different ways to start the server
+if [ -f "server.js" ]; then
+    echo "Starting with server.js..."
+    if ! node server.js; then
+        echo "ERROR: Server failed to start with server.js!"
+        echo "Waiting 60 seconds before exit..."
+        sleep 60
+        exit 1
+    fi
+elif [ -f ".next/standalone/server.js" ]; then
+    echo "Starting with .next/standalone/server.js..."
+    if ! node .next/standalone/server.js; then
+        echo "ERROR: Server failed to start with .next/standalone/server.js!"
+        echo "Waiting 60 seconds before exit..."
+        sleep 60
+        exit 1
+    fi
+else
+    echo "ERROR: No server.js found anywhere!"
+    echo "Trying to run Next.js directly..."
+    if ! npx next start; then
+        echo "ERROR: Next.js start failed!"
+        echo "Waiting 60 seconds before exit..."
+        sleep 60
+        exit 1
+    fi
 fi
