@@ -1,0 +1,265 @@
+# SmartSchedule - Cursor Rules
+
+## 🎯 Project Overview
+This is a university schedule management system built with Next.js 14, TypeScript, and Prisma. The application supports both student and admin interfaces for managing academic schedules, groups, and subjects.
+
+## 🏗️ Architecture & Tech Stack
+
+### Core Technologies
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS with Radix UI components
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: NextAuth.js
+- **State Management**: React hooks, SWR for data fetching
+
+### Project Structure
+```
+app/                    # Next.js App Router pages
+├── admin/             # Admin dashboard and management
+├── student/           # Student interface and schedule
+├── api/               # API routes
+└── login/             # Authentication pages
+
+components/            # Reusable React components
+├── admin/            # Admin-specific components
+├── auth/             # Authentication components
+├── student/          # Student-specific components
+└── ui/               # Base UI components (Radix UI)
+
+lib/                  # Utilities, configs, and shared logic
+prisma/               # Database schema and migrations
+scripts/              # Data seeding and utility scripts
+```
+
+## 📝 Coding Standards
+
+### TypeScript
+- Use strict TypeScript configuration
+- Define proper interfaces for all data structures
+- Use type guards and proper error handling
+- Prefer `interface` over `type` for object shapes
+- Use generic types where appropriate
+
+### React/Next.js
+- Use functional components with hooks
+- Implement proper error boundaries
+- Use Next.js App Router patterns
+- Server components for data fetching, client components for interactivity
+- Proper SEO with metadata API
+
+### Database (Prisma)
+- Use descriptive model names and field names
+- Implement proper relationships with foreign keys
+- Use enums for fixed value sets
+- Add proper indexes for performance
+- Use transactions for complex operations
+
+### Styling (Tailwind CSS)
+- Use utility classes, avoid custom CSS when possible
+- Follow mobile-first responsive design
+- Use consistent spacing scale (4, 8, 12, 16, 24, 32)
+- Implement dark mode support where applicable
+- Use Radix UI components as base, customize with Tailwind
+
+## 🎨 UI/UX Guidelines
+
+### Design System
+- **Colors**: Use semantic color tokens (blue-600, green-600, etc.)
+- **Typography**: Inter font family, consistent sizing scale
+- **Spacing**: 4px base unit (space-1 = 4px, space-2 = 8px, etc.)
+- **Components**: Radix UI primitives with custom styling
+- **Icons**: Lucide React icons, consistent sizing (h-4 w-4, h-5 w-5, h-6 w-6)
+
+### Component Patterns
+- Create reusable components in `/components/ui/`
+- Use compound component patterns for complex UI
+- Implement proper loading and error states
+- Use consistent button variants and sizes
+- Follow accessibility guidelines (ARIA labels, keyboard navigation)
+
+### Layout Patterns
+- Use CSS Grid for complex layouts
+- Implement responsive breakpoints (sm, md, lg, xl)
+- Use consistent card patterns for content sections
+- Implement proper navigation patterns
+
+## 🔐 Security & Authentication
+
+### Authentication
+- Use NextAuth.js for session management
+- Implement proper role-based access control
+- Hash passwords with bcryptjs
+- Validate all user inputs
+- Use CSRF protection
+
+### API Security
+- Validate request data with Zod schemas
+- Implement rate limiting for API routes
+- Use proper HTTP status codes
+- Sanitize database queries to prevent injection
+- Implement proper error handling without exposing internals
+
+## 📊 Data Management
+
+### Database Operations
+- Use Prisma for all database operations
+- Implement proper error handling for DB operations
+- Use transactions for multi-table operations
+- Implement soft deletes where appropriate
+- Use proper indexing for performance
+
+### Data Fetching
+- Use SWR for client-side data fetching
+- Implement proper loading and error states
+- Use server components for initial data loading
+- Implement optimistic updates where appropriate
+- Cache data appropriately
+
+## 🧪 Testing & Quality
+
+### Code Quality
+- Use ESLint and Prettier for code formatting
+- Write meaningful commit messages
+- Use TypeScript strict mode
+- Implement proper error handling
+- Use meaningful variable and function names
+
+### Performance
+- Optimize images with Next.js Image component
+- Use dynamic imports for code splitting
+- Implement proper caching strategies
+- Minimize bundle size
+- Use React.memo and useMemo where appropriate
+
+## 🚀 Development Workflow
+
+### Git Workflow
+- Use feature branches for new features
+- Write descriptive commit messages
+- Use conventional commits format
+- Create pull requests for code review
+- Keep main branch stable
+
+### Code Organization
+- Group related functionality together
+- Use barrel exports for clean imports
+- Separate concerns (UI, logic, data)
+- Use custom hooks for reusable logic
+- Keep components small and focused
+
+### File Naming
+- Use kebab-case for file names
+- Use PascalCase for component names
+- Use camelCase for function and variable names
+- Use UPPER_CASE for constants
+- Use descriptive names that explain purpose
+
+## 🔧 Development Guidelines
+
+### Environment Setup
+- Use environment variables for configuration
+- Provide clear setup instructions
+- Use Docker for consistent development environment
+- Document all required environment variables
+
+### Error Handling
+- Implement proper error boundaries
+- Use try-catch blocks for async operations
+- Provide meaningful error messages to users
+- Log errors appropriately for debugging
+- Handle edge cases gracefully
+
+### Performance Considerations
+- Use React.memo for expensive components
+- Implement proper loading states
+- Use virtual scrolling for large lists
+- Optimize images and assets
+- Monitor bundle size
+
+## 📱 Responsive Design
+
+### Breakpoints
+- Mobile: < 640px (sm)
+- Tablet: 640px - 1024px (md)
+- Desktop: 1024px - 1280px (lg)
+- Large Desktop: > 1280px (xl)
+
+### Mobile-First Approach
+- Design for mobile first
+- Use responsive utilities
+- Test on various screen sizes
+- Implement touch-friendly interactions
+- Consider mobile performance
+
+## 🌐 Internationalization
+
+### Text Content
+- Use Russian language for UI text
+- Implement proper date/time formatting
+- Use consistent terminology
+- Consider RTL support if needed
+- Externalize all user-facing strings
+
+## 🐛 Debugging & Troubleshooting
+
+### Common Issues
+- Check console for TypeScript errors
+- Verify database connections
+- Check environment variables
+- Use React DevTools for component debugging
+- Use Prisma Studio for database inspection
+
+### Logging
+- Use console.log for development debugging
+- Implement proper error logging
+- Use structured logging format
+- Avoid logging sensitive information
+- Use different log levels (info, warn, error)
+
+## 📚 Documentation
+
+### Code Documentation
+- Write JSDoc comments for complex functions
+- Document component props with TypeScript
+- Use meaningful variable names
+- Add comments for complex business logic
+- Keep README updated
+
+### API Documentation
+- Document all API endpoints
+- Include request/response examples
+- Document error codes and messages
+- Use OpenAPI/Swagger if applicable
+- Keep API documentation current
+
+## 🚨 Common Patterns to Avoid
+
+### Anti-patterns
+- Don't use `any` type in TypeScript
+- Avoid prop drilling, use context or state management
+- Don't mutate props or state directly
+- Avoid large components, split into smaller ones
+- Don't ignore TypeScript errors
+
+### Performance Anti-patterns
+- Don't create objects/functions in render
+- Avoid unnecessary re-renders
+- Don't fetch data in useEffect without dependencies
+- Avoid large bundle sizes
+- Don't ignore accessibility requirements
+
+## 🎯 Best Practices Summary
+
+1. **Type Safety**: Always use TypeScript, avoid `any`
+2. **Component Design**: Small, focused, reusable components
+3. **State Management**: Use appropriate state management patterns
+4. **Error Handling**: Implement comprehensive error handling
+5. **Performance**: Optimize for performance from the start
+6. **Accessibility**: Build accessible interfaces
+7. **Testing**: Write tests for critical functionality
+8. **Documentation**: Keep documentation current and helpful
+9. **Security**: Implement proper security measures
+10. **Code Quality**: Maintain high code quality standards
+
+Remember: This is a university schedule management system, so prioritize clarity, reliability, and user experience. The system should be intuitive for both students and administrators to use.
