@@ -3,7 +3,7 @@ const path = require('path');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   distDir: process.env.NEXT_DIST_DIR || '.next',
-  output: process.env.NEXT_OUTPUT_MODE,
+  output: 'standalone', // Enable standalone output for Docker
   experimental: {
     outputFileTracingRoot: path.join(__dirname, '../'),
   },
@@ -13,7 +13,14 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  images: { unoptimized: true },
+  images: { 
+    unoptimized: true,
+    domains: ['localhost'],
+  },
+  // Environment variables that should be available at build time
+  env: {
+    CUSTOM_KEY: process.env.CUSTOM_KEY,
+  },
 };
 
 module.exports = nextConfig;

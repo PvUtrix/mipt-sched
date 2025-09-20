@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: smartschedule-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: smartschedule
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - smartschedule-network
+
+  # Redis (for session storage and caching)
+  redis:
+    image: redis:7-alpine
+    container_name: smartschedule-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - smartschedule-network
+
+  # SmartSchedule Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smartschedule-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/smartschedule
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=your-super-secret-key-change-in-production
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - smartschedule-network
+    volumes:
+      - ./data:/app/data:ro  # Read-only access to data files
+
+  # Database Migration Service
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smartschedule-migrate
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/smartschedule
+    depends_on:
+      - postgres
+    networks:
+      - smartschedule-network
+    command: >
+      sh -c "
+        echo 'Waiting for database to be ready...' &&
+        npx prisma db push &&
+        echo 'Running database migrations...' &&
+        npx prisma db seed &&
+        echo 'Database setup complete!'
+      "
+    restart: "no"
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  smartschedule-network:
+    driver: bridge

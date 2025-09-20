@@ -201,6 +201,30 @@ scripts/              # Data seeding and utility scripts
 - Consider RTL support if needed
 - Externalize all user-facing strings
 
+## 📚 Documentation Standards
+
+### Language Requirements
+- **ALL documentation must be written in Russian**
+- This includes README.md, DEPLOYMENT.md, code comments, and any other documentation files
+- Use proper Russian technical terminology
+- Maintain consistency in terminology across all documents
+- Use formal Russian language style for documentation
+
+### Documentation Files to Keep in Russian
+- README.md - Main project documentation
+- DEPLOYMENT.md - Deployment instructions
+- API documentation
+- Code comments and JSDoc
+- Error messages and user-facing text
+- Configuration file comments
+- Git commit messages (can be in English for technical consistency)
+
+### Russian Technical Terms
+- Use established Russian IT terminology
+- Be consistent with terms like "расписание" (schedule), "группа" (group), "предмет" (subject)
+- Use proper Russian grammar and punctuation
+- Include English terms in parentheses when first introduced
+
 ## 🐛 Debugging & Troubleshooting
 
 ### Common Issues
